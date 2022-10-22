@@ -2,9 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Event Method</title>
 </head>
 <body>
+<div id="body" v-cloak>
+    event: v-on:click || @click<br>
+    <button @click="isVisible = true"> Show Box </button>
+    <button @click="isVisible = !isVisible"> Toggle Box </button>
+    <button @click="toggleBox">
+        Button with function
+    </button>
+<!--    @click.right = chỉ nhận event chuột phải-->
+<!--    @click.prevent.stop = ngăn không submit form-->
+    <div v-if="isVisible" style="background-color: darkgreen; width: 200px;height: 200px">
+        <span style="color: deepskyblue"> Hello </span>
+    </div>
 
+    <input v-model="text" @keyup.enter="getText(text)" >
+</div>
+
+
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    let app= Vue.createApp({
+        data: function (){
+            return {
+                text: "Learn VueJs",
+                isVisible: false,
+            }
+        },
+        methods: {
+            toggleBox(){
+                this.isVisible = !this.isVisible;
+            },
+            getText(text){
+               console.log(text);
+               console.log(this.text);
+            }
+        }
+    })
+
+    app.mount('#body');
+</script>
 </body>
+<style>
+    [v-cloak]{
+        display: none;
+    }
+    button {
+
+        margin: 10px;
+    }
+</style>
 </html>
