@@ -3,25 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="style.css">
+<!--    <link rel="stylesheet" href="style.css">-->
 </head>
 <body>
     <div class="center">
-        <h1>Login</h1>
-        <form method="post">
-            <div class="text-field">
-                <input type="text" required>
-                <label for="">UserName</label>
-            </div>
-            <div class="text-field">
-                <input type="password" required>
-                <label for="">Password</label>
-            </div>
-            <button name="" value="" class="login">Login</button>
-            <div class="signup-link">
-                Not a member? <a href="signup.html">Signup</a>
-            </div>
-        </form>
+        <div id="form">
+            <login-form />
+        </div>
     </div>
+<!--     @submit.prevent ngăn không cho form reload sau khi submit-->
+<!--    v-bind biến html thuần thành 1 biến gọi js-->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        let app = Vue.createApp({})
+        app.component('login-form',{
+            template: `
+              <h1>{{ title }}</h1>
+            <form @submit.prevent="handleSubmit">
+                <div class="text-field">
+                    <custom-input v-model="email" required v-bind:label="emailLabel"/>
+                </div>
+                <div class="text-field">
+                    <custom-input v-model="password" required v-bind:label="passwordLabel" />
+                </div>
+                <button name="" value="" class="login">Login</button>
+            </form>
+            `,
+            component:['custom-input'],
+            data(){
+                return{
+                    title: 'Login',
+                    email: '',
+                    password: '',
+                    emailLabel: 'Email',
+                    passwordLabel: 'Password',
+                }
+            },
+            methods: {
+                handleSubmit(){
+                    console.log(this.email, this.password)
+                }
+            }
+        })
+        app.component('custom-input', {
+            template: `
+                <label>
+                    {{ label }}
+                    <input type="text" v-model="inputValue">
+                </label>
+            `,
+            props: ['label', 'modelValue'],
+            computed:{
+                inputValue:{
+                    get(){
+                        return this.modelValue
+                    },
+                    set(value){
+                        this.$emit('update:modelValue', value) //Bắt tất cả các event trên form
+                    }
+                }
+            },
+            // data(){
+            //     return {
+            //         inputValue: '',
+            //     }
+            // }
+
+        })
+        app.mount('#form');
+    </script>
 </body>
 </html>
